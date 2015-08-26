@@ -2,22 +2,6 @@ var LolApi = require('leagueapi');
 
 LolApi.init('2642bbe6-c6ce-4ba4-8594-0974b216dd5d', 'na');
 
-// LolApi.Static.getChampionList(true, function(err, champs) {
-//             console.log(champs.data);
-// });
-
-// LolApi.Summoner.getByName('YOLO Swag 5ever', function(err, summoner) {
-//     if(!err) {
-//         console.log(summoner);
-//     }
-// })
-
-// //The wrapper also accepts promises:
-// LolApi.Summoner.getByName('YOLO Swag 5ever')
-// .then(function (summoner) {
-//     console.log(summoner);
-// });
-
 /*
 var matches;
 
@@ -109,74 +93,17 @@ function getMatches (i) {
 							" plundercrabs " + win.brawler[3] + " ocklepods \n  Upgrades:"+ win.upgrades + "\nLosses:\n Brawler: " + loss.brawler[0] + 
 							" razorfins " + loss.brawler[1] + " ironbacks " + loss.brawler[2] + " plundercrabs " + loss.brawler[3] + 
 							" ocklepods \n  Upgrades:"+ loss.upgrades + "\n");
-					console.log(err);
-					return;
+					console.log(err + " MatchId: " + bWMatches[i]);
 				}
 			});
 			getMatches(i);
-		},1500);
+		},1300);
 	}else{
 		
 		return;
 	}
 }
 
-/*
-
-LolApi.getMatch(1907069332, [true], 'na', function(err, match){
-	var myFrame = match.timeline.frames;
-	var player = function (){
-		this.win = 'Loss';
-		this.brawler = '';
-		this.upgrades = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-	}
-	var players = [new player,new player,new player,new player,new player,new player,new player,new player,new player,new player]
-	if (match.teams[0].winner = true)
-		players[0].win = players[1].win = players[2].win = players[3].win = players[4].win = 'Win';
-	else
-		players[5].win = players[6].win = players[7].win = players[8].win = players[9].win = 'Win';
-	var events;
-	for (var i = 1; i < myFrame.length; i++) {
-		for (var j = 0; j < myFrame[i].events.length; j++) {	
-
-			if (myFrame[i].events[j].eventType == 'ITEM_PURCHASED') {
-				events = myFrame[i].events[j];
-				if (events.itemId == 3611)
-					players[events.participantId - 1].brawler = 'razorfins';
-				if (events.itemId == 3612)
-					players[events.participantId - 1].brawler = 'ironbacks';
-				if (events.itemId == 3613)
-					players[events.participantId - 1].brawler = 'plundercrabs';
-				if (events.itemId == 3614)
-					players[events.participantId - 1].brawler = 'ocklepods';
-				if (events.itemId == 3615)
-					players[events.participantId - 1].upgrades[0][0] =1;
-				if (events.itemId == 3616)
-					players[events.participantId - 1].upgrades[0][1] =1;
-				if (events.itemId == 3617)
-					players[events.participantId - 1].upgrades[0][2] =1;
-				if (events.itemId == 3621)
-					players[events.participantId - 1].upgrades[1][0] =1;
-				if (events.itemId == 3622)
-					players[events.participantId - 1].upgrades[1][1] =1;
-				if (events.itemId == 3623)
-					players[events.participantId - 1].upgrades[1][2] =1;
-				if (events.itemId == 3624)
-					players[events.participantId - 1].upgrades[2][0] =1;
-				if (events.itemId == 3625)
-					players[events.participantId - 1].upgrades[2][1] =1;
-				if (events.itemId == 3626)
-					players[events.participantId - 1].upgrades[2][2] =1;
-				//if(bWBrawlers.indexOf(myFrame[i].events[j].itemId) > -1)
-				
-
-			};
-		};
-	};
-	for (var i = players.length - 1; i >= 0; i--) {
-		console.log("\nPlayer " + (i+1) + " Outcome: "+ players[i].win +"\n Brawler: " + players[i].brawler + " \n  Upgrades: " + players[i].upgrades);
-	};
-});*/
 function getMatchList(){
 bWMatches = [
 1907069332, 
