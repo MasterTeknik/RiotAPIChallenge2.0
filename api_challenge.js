@@ -1,5 +1,4 @@
 var LolApi = require('leagueapi');
-
 LolApi.init('2642bbe6-c6ce-4ba4-8594-0974b216dd5d', 'na');
 
 /*
@@ -13,6 +12,9 @@ oReq.send();
 function reqListener(e) {
     matches = JSON.parse(this.responseText);
 }*/
+//LolApi.getMatch(1907413144, [true], 'na', function(err, match){
+//	console.log(match.timeline.frames)
+//});
 
 var bWMatches;
 getMatchList();
@@ -20,10 +22,16 @@ var player = function (){
 	this.brawler = [0,0,0,0];//razorfins,ironbacks,plundercrabs,ocklepods
 	this.upgrades = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];//Ability,Offense,Defense
 }
-var win = new player;
-var loss = new player;
-//getMatches(1);
-getMatches(bWMatches.length);
+var frame = function (){
+	this.win = new player;
+	this.loss = new player;
+	this.timeStamp = "";
+}
+var win = [];
+var loss = [];
+var frameList = [];
+getMatches(5);
+//getMatches(bWMatches.length);
 function getMatches (i) {
 	i -= 1;	
 	if (i >= 0 ){
@@ -42,15 +50,21 @@ function getMatches (i) {
 						for (var k = 1; k < myFrame.length; k++) {
 							
 							while(myFrame[k].events == null && k < myFrame.length)
-									k++;
+								k++;
+							if(frameList[k] == null)
+							{
+								frameList[k] = new frame;
+								var time = myFrame[k].timestamp/1000
+								frameList[k].timeStamp = parseInt(time / 60,10).toString() + ":Min";
+							}
 							for (var j = 0; j < myFrame[k].events.length; j++) {	
 
 								if (myFrame[k].events[j].eventType == 'ITEM_PURCHASED') {
 									events = myFrame[k].events[j];
 									if (winner.indexOf(events.participantId) > -1)
-										players = win;
+										players = frameList[k].win;
 									else
-										players = loss;
+										players = frameList[k].loss;
 									
 									if (events.itemId == 3611)
 										players.brawler[0] += 1;//razorfins
@@ -83,21 +97,32 @@ function getMatches (i) {
 						}
 					}
 					console.log("\n"+i+ " Many matches left");
-					if(i == 0)
-						console.log("\nWins:\n Brawler: " + win.brawler[0] + " razorfins " + win.brawler[1] + " ironbacks " + win.brawler[2] + 
-							" plundercrabs " + win.brawler[3] + " ocklepods \n  Upgrades:"+ win.upgrades + "\nLosses:\n Brawler: " + loss.brawler[0] + 
-							" razorfins " + loss.brawler[1] + " ironbacks " + loss.brawler[2] + " plundercrabs " + loss.brawler[3] + 
-							" ocklepods \n  Upgrades:"+ loss.upgrades);
+					if(i == 0){
+						for (var j = 0; j < frameList.length; j++) {
+							if(frameList[j] != null){
+								console.log("\nFrame: "+ frameList[j].timeStamp)
+								console.log("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
+								" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
+								console.log("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
+								" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
+							}
+						};
+					}
 				}else{
-					console.log("\nWins:\n Brawler: " + win.brawler[0] + " razorfins " + win.brawler[1] + " ironbacks " + win.brawler[2] + 
-							" plundercrabs " + win.brawler[3] + " ocklepods \n  Upgrades:"+ win.upgrades + "\nLosses:\n Brawler: " + loss.brawler[0] + 
-							" razorfins " + loss.brawler[1] + " ironbacks " + loss.brawler[2] + " plundercrabs " + loss.brawler[3] + 
-							" ocklepods \n  Upgrades:"+ loss.upgrades + "\n");
+					for (var j = 0; j < frameList.length; j++) {
+						if(frameList[j] != null){
+							console.log("\nFrame: "+ frameList[j].timeStamp)
+							console.log("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
+							" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
+							console.log("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
+							" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
+						}
+					};
 					console.log(err + " MatchId: " + bWMatches[i]);
 				}
 			});
 			getMatches(i);
-		},1300);
+		},1400);
 	}else{
 		
 		return;
