@@ -13,7 +13,7 @@ function reqListener(e) {
     matches = JSON.parse(this.responseText);
 }*/
 //LolApi.getMatch(1907413144, [true], 'na', function(err, match){
-//	console.log(match.timeline.frames)
+//	console.log(match.timeline.frames[2].participantFrames[(1).toString()])
 //});
 
 var bWMatches;
@@ -23,6 +23,7 @@ var player = function (){
 	this.upgrades = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];//Ability,Offense,Defense
 }
 var frame = function (){
+	this.goldDif = [];
 	this.win = new player;
 	this.loss = new player;
 	this.timeStamp = "";
@@ -55,7 +56,18 @@ function getMatches (i) {
 							{
 								frameList[k] = new frame;
 								var time = myFrame[k].timestamp/1000
-								frameList[k].timeStamp = parseInt(time / 60,10).toString() + ":Min";
+								frameList[k].timeStamp = parseInt(time / 60,10).toString() + ":Min";							
+							}
+							if(myFrame[k].participantFrames != null && frameList[k] != null){
+								var t1 = myFrame[k].participantFrames['1'].totalGold+myFrame[k].participantFrames['2'].totalGold+myFrame[k].participantFrames['3'].totalGold+
+								myFrame[k].participantFrames['4'].totalGold+myFrame[k].participantFrames['5'].totalGold;
+								var t2 = myFrame[k].participantFrames['6'].totalGold+myFrame[k].participantFrames['7'].totalGold+myFrame[k].participantFrames['8'].totalGold+
+								myFrame[k].participantFrames['9'].totalGold+myFrame[k].participantFrames['10'].totalGold;
+								if (match.teams[0].winner = true)
+									frameList[k].goldDif[i] = [t1,t2];
+								else
+									frameList[k].goldDif[i] = [t2,t1];
+
 							}
 							for (var j = 0; j < myFrame[k].events.length; j++) {	
 
@@ -97,10 +109,13 @@ function getMatches (i) {
 						}
 					}
 					console.log("\n"+i+ " Many matches left");
+					
 					if(i == 0){
 						for (var j = 0; j < frameList.length; j++) {
 							if(frameList[j] != null){
-								console.log("\nFrame: "+ frameList[j].timeStamp)
+								console.log("\nFrame: "+ frameList[j].timeStamp);
+								console.log("\nGold Difference:");
+							frameList[j].goldDif.forEach( function(ele,ind,arr){console.log(" Game "+ ind +" "+ ele)});
 								console.log("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
 								" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
 								console.log("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
@@ -111,13 +126,18 @@ function getMatches (i) {
 				}else{
 					for (var j = 0; j < frameList.length; j++) {
 						if(frameList[j] != null){
-							console.log("\nFrame: "+ frameList[j].timeStamp)
-							console.log("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
-							" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
-							console.log("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
-							" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
+							console.log("\nFrame: "+ frameList[j].timeStamp);
+							console.log("\nGold Difference:");
+							frameList[j].goldDif.forEach( function(ele,ind,arr){console.log(" Game "+ ind +" "+ ele)});
+							
+							//console.log("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
+							//" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
+							//console.log("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
+							//" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
 						}
 					};
+					
+
 					console.log(err + " MatchId: " + bWMatches[i]);
 				}
 			});
