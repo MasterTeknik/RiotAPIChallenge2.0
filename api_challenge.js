@@ -35,6 +35,19 @@ var text = [];
 //getMatches(bWMatches.length);
 getMatches(5);
 function finished(){
+	for (var j = 0; j < frameList.length; j++) {
+		if(frameList[j] != null){
+			text.push("\nFrame: "+ frameList[j].timeStamp);
+			text.push("\nGold Difference:");
+			frameList[j].goldDif.forEach( function(ele,ind,arr){text.push(" Game "+ ind +" "+ ele)});
+			text.push("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
+			" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
+			text.push("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
+			" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
+			//text.push("\nLosses:\n Brawler: %s razorfins %s ironbacks %s plundercrabs %s ocklepods \n  Upgrades:%s", 
+				//frameList[j].loss.brawler[0],frameList[j].loss.brawler[1],frameList[j].loss.brawler[2],frameList[j].loss.brawler[3],frameList[j].loss.upgrades);
+		}
+	};
 	text.forEach(function(ele,ind,arr){console.log(ele)});
 }
 function getMatches (i) {
@@ -115,21 +128,6 @@ function getMatches (i) {
 					console.log("\n%s Many matches left",i);
 					
 					if(i == 0){
-						for (var j = 0; j < frameList.length; j++) {
-							if(frameList[j] != null){
-								text.push("\nFrame: "+ frameList[j].timeStamp);
-								text.push("\nGold Difference:");
-								frameList[j].goldDif.forEach( function(ele,ind,arr){text.push(" Game "+ ind +" "+ ele)});
-								text.push("\nWins:\n Brawler: " + frameList[j].win.brawler[0] + " razorfins " + frameList[j].win.brawler[1] + " ironbacks " + frameList[j].win.brawler[2] + 
-								" plundercrabs " + frameList[j].win.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].win.upgrades);
-								text.push("\nLosses:\n Brawler: " + frameList[j].loss.brawler[0] + " razorfins " + frameList[j].loss.brawler[1] + " ironbacks " + frameList[j].loss.brawler[2] + 
-								" plundercrabs " + frameList[j].loss.brawler[3] + " ocklepods \n  Upgrades:"+ frameList[j].loss.upgrades);
-								//text.push("\nLosses:\n Brawler: %s razorfins %s ironbacks %s plundercrabs %s ocklepods \n  Upgrades:%s", 
-									//frameList[j].loss.brawler[0],frameList[j].loss.brawler[1],frameList[j].loss.brawler[2],frameList[j].loss.brawler[3],frameList[j].loss.upgrades);
-							}
-						};
-						console.log("got Text");
-						var getit = ['a','b','c']
 						finished();
 					}
 				}else{
